@@ -1,0 +1,64 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: create-node-service
+  title: Serviço Base em Node.js
+  description: Template para criar serviços em Node.js, integrado ao pipeline existente.
+  tags:
+    - nodejs
+    - service
+spec:
+  owner: devops-team
+  type: service
+  parameters:
+    - title: Configurações do Projeto
+      required:
+        - projectName
+        - repoVisibility
+        - owner
+      properties:
+        projectName:
+          title: Nome do Projeto
+          type: string
+          description: Nome do repositório ou serviço.
+        owner:
+          title: Dono do Repositório
+          type: string
+          description: Nome do usuário ou organização no GitHub.
+        repoVisibility:
+          title: Visibilidade do Repositório
+          type: string
+          enum:
+            - public
+            - private
+          description: Defina a visibilidade do repositório GitHub.
+
+  steps:
+    - id: fetch-template
+      name: Buscar Template Base
+      action: fetch:template
+      input:
+        url: https://github.com/pedrojbDev/node-template-backstage/archive/main.zip
+        targetPath: .
+
+    - id: publish-to-repo
+      name: Publicar no GitHub
+      action: publish:github
+      input:
+        repoUrl: github.com/{{ parameters.owner }}/{{ parameters.projectName }}
+        repoVisibility: "{{ parameters.repoVisibility }}"
+
+    - id: register-in-catalog
+      name: Registrar no Catálogo
+      action: catalog:register
+      input:
+        location:
+          type: url
+          target: https://github.com/{{ parameters.owner }}/{{ parameters.projectName }}/blob/main/catalog-info.yaml
+
+  output:
+    links:
+      - title: Repositório do Projeto
+        url: https://github.com/{{ parameters.owner }}/{{ parameters.projectName }}
+      - title: Catálogo Backstage
+        url: /catalog/default/component/{{ parameters.projectName }}
