@@ -38,7 +38,7 @@ spec:
       name: Buscar Template Base
       action: fetch:template
       input:
-        url: https://github.com/pedrojbDev/node-template-backstage/archive/main.zip
+        url: https://github.com/pedrojbDev/api-node-template-backstage/tree/main/templates/src
         targetPath: .
 
     - id: publish-to-repo
