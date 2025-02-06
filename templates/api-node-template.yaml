@@ -2,7 +2,7 @@ apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
   name: create-node-service
-  title: Simple Node.js Template
+  title: Serviço Base em Node.js
   description: Template para criar serviços em Node.js, integrado ao pipeline existente.
   tags:
     - nodejs
